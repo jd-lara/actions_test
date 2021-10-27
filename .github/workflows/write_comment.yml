@@ -28,5 +28,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
-           This is the performance comparison
+           This is the performance comparison updated
            - With GitHub **Markdown** :sparkles:
