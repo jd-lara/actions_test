@@ -14,8 +14,6 @@ jobs:
           julia --project=test -e 'using Pkg; Pkg.instantiate()'
           julia --project=test test/performance_test.jl
       - name: Run Perfomance Test Master
-        uses: actions/checkout@v1
-        uses: julia-actions/setup-julia@latest
         run: |
           julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev="master")); Pkg.instantiate()'
           julia --project=test test/performance_test.jl
