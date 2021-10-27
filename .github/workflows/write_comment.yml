@@ -17,10 +17,18 @@ jobs:
         run: |
           julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev="master")); Pkg.instantiate()'
           julia --project=test test/performance_test.jl "master"
-      - name: Read results
-        id: get-comment-body
+      - name: Read precompile results
+        id: precompile_results
         run: |
           body="$(cat precompile_time.txt)"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo "::set-output name=body::$body"
+      - name: Read execute results
+        id: execute_results
+        run: |
+          body="$(cat execute_time.txt)"
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
@@ -41,13 +49,23 @@ jobs:
             Performance Results
             | Version      | Precompile Time |
             | :---        |    :----:   |
-            ${{ steps.get-comment-body.outputs.body }}
+            ${{ steps.precompile_results.outputs.body }}
+
+            | Version      | Execute Time |
+            | :---        |    :----:   |
+            ${{ steps.execute_results.outputs.body }}
       - name: Update comment
         if: steps.fc.outputs.comment-id != ''
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
-            This comment has been updated!
             Performance Results
-            ${{ steps.get-comment-body.outputs.body }}
+            | Version      | Precompile Time |
+            | :---        |    :----:   |
+            ${{ steps.precompile_results.outputs.body }}
+
+            | Version      | Execute Time |
+            | :---        |    :----:   |
+            ${{ steps.execute_results.outputs.body }}
+          edit-mode: replace
