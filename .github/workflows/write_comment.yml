@@ -11,7 +11,7 @@ jobs:
         id: template
         uses: chuhlomin/render-template@v1.2
         with:
-          template: .github/comment.md
+          template: .github/workflows/comment.md
           vars: |
             foo: this
             bar: that
