@@ -6,17 +6,18 @@ on:
 jobs:
   comment:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: ["master", nothing]
     steps:
       - uses: julia-actions/setup-julia@latest
       - uses: actions/checkout@v1
-      - name: Run Perfomance Test current Tag
+      - name: Run Perfomance Test
+        env:
+          test_version: ${{ matrix.version}}
         run: |
-          julia --project=test -e 'using Pkg; Pkg.instantiate()'
-          julia --project=test test/performance_test.jl "current_tag"
-      - name: Run Perfomance Test Master
-        run: |
-          julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev="master")); Pkg.instantiate()'
-          julia --project=test test/performance_test.jl "master"
+          julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev=$test_version)); Pkg.instantiate()'
+          julia --project=test test/performance_test.jl $test_version
       - name: Read precompile results
         id: precompile_results
         run: |
