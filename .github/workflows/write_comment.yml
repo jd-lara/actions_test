@@ -12,25 +12,34 @@ jobs:
       - name: Run Perfomance Test current Tag
         run: |
           julia --project=test -e 'using Pkg; Pkg.instantiate()'
-          julia --project=test test/performance_test.jl
+          julia --project=test test/performance_test.jl "current_tag"
       - name: Run Perfomance Test Master
         run: |
           julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev="master")); Pkg.instantiate()'
           julia --project=test test/performance_test.jl
+      - name: Read results
+        id: get-comment-body
+        run: |
+          body="$(cat precompile_time.txt)"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo "::set-output name=body::$body"
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: This comment was written by a bot!
+          body-includes: Performance Results
       - name: Create comment
         if: steps.fc.outputs.comment-id == ''
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            This comment was written by a bot!
+            Performance Results
+            ${{ steps.get-comment-body.outputs.body }}
       - name: Update comment
         if: steps.fc.outputs.comment-id != ''
         uses: peter-evans/create-or-update-comment@v1
@@ -38,3 +47,5 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
             This comment has been updated!
+            Performance Results
+            ${{ steps.get-comment-body.outputs.body }}
