@@ -7,6 +7,16 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
+      - name: Run Perfomance Test current Tag
+        uses: julia-actions/setup-julia@latest
+        run: |
+          julia --project=test -e 'using Pkg; Pkg.instantiate()'
+          julia --project=test test/performance_test.jl
+      - name: Run Perfomance Test Master
+        uses: julia-actions/setup-julia@latest
+        run: |
+          julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev="master")); Pkg.instantiate()'
+          julia --project=test test/performance_test.jl
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
