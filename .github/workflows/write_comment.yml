@@ -9,3 +9,6 @@ jobs:
     steps:
       - name: Run Perfomance Test current Tag
         uses: julia-actions/setup-julia@latest
+        uses: actions/checkout@v1
+        run: |
+          julia --project=test -e 'using Pkg; Pkg.instantiate()'
