@@ -30,3 +30,4 @@ jobs:
           body: |
            This is the performance comparison updated
            - With GitHub **Markdown** :sparkles:
+          edit-mode: replace
