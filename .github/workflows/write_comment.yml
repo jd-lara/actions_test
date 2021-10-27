@@ -1,4 +1,4 @@
-- name: 'Comment PR'
+name: 'Comment PR'
 
 on:
   pull_request:
