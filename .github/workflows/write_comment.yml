@@ -8,27 +8,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Find Comment
-            uses: peter-evans/find-comment@v1
-            id: fc
-            with:
-              issue-number: ${{ github.event.pull_request.number }}
-              comment-author: 'github-actions[bot]'
-              body-includes: This comment was written by a bot!
-
-          - name: Create comment
-            if: steps.fc.outputs.comment-id == ''
-            uses: peter-evans/create-or-update-comment@v1
-            with:
-              issue-number: ${{ github.event.pull_request.number }}
-              body: |
-                This comment was written by a bot!
-              reactions: rocket
-
-          - name: Update comment
-            if: steps.fc.outputs.comment-id != ''
-            uses: peter-evans/create-or-update-comment@v1
-            with:
-              comment-id: ${{ steps.fc.outputs.comment-id }}
-              body: |
-                This comment has been updated!
-              reactions: hooray
+          uses: peter-evans/find-comment@v1
+          id: fc
+          with:
+            issue-number: ${{ github.event.pull_request.number }}
+            comment-author: 'github-actions[bot]'
+            body-includes: This comment was written by a bot!
+      - name: Create comment
+          if: steps.fc.outputs.comment-id == ''
+          uses: peter-evans/create-or-update-comment@v1
+          with:
+            issue-number: ${{ github.event.pull_request.number }}
+            body: |
+              This comment was written by a bot!
+            reactions: rocket
+        - name: Update comment
+          if: steps.fc.outputs.comment-id != ''
+          uses: peter-evans/create-or-update-comment@v1
+          with:
+            comment-id: ${{ steps.fc.outputs.comment-id }}
+            body: |
+              This comment has been updated!
+            reactions: hooray
