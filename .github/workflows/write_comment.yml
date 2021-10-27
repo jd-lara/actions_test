@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["master", nothing]
+        version: [master, "0.7.0"]
     steps:
       - uses: julia-actions/setup-julia@latest
       - uses: actions/checkout@v1
