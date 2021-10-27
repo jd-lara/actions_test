@@ -16,7 +16,7 @@ jobs:
         env:
           test_version: ${{ matrix.version}}
         run: |
-          julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev=$test_version)); Pkg.instantiate()'
+          julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev=ARGS[1])); Pkg.instantiate()' $test_version
           julia --project=test test/performance_test.jl $test_version
       - name: Read precompile results
         id: precompile_results
