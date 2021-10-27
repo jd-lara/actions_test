@@ -16,7 +16,7 @@ jobs:
       - name: Run Perfomance Test Master
         run: |
           julia --project=test -e 'using Pkg; Pkg.add(PackageSpec(name="PowerSimulationsDynamics", rev="master")); Pkg.instantiate()'
-          julia --project=test test/performance_test.jl
+          julia --project=test test/performance_test.jl "master"
       - name: Read results
         id: get-comment-body
         run: |
