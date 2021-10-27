@@ -13,3 +13,4 @@ jobs:
         run: |
           julia --project=test -e 'using Pkg; Pkg.instantiate()'
           julia --project=test test/performance_test.jl
+
