@@ -7,13 +7,21 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
+      - name: Render template
+        id: template
+        uses: chuhlomin/render-template@v1.2
+        with:
+          template: .github/comment.md
+          vars: |
+            foo: this
+            bar: that
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: This comment was written by a bot!
+          body: ${{ steps.template.outputs.result }}
       - name: Create comment
         if: steps.fc.outputs.comment-id == ''
         uses: peter-evans/create-or-update-comment@v1
@@ -27,4 +35,6 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
-            This comment has been updated!
+            This comment has been updated to new results!
+            ${{ steps.template.outputs.result }}
+          edit-mode: replace
