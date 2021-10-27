@@ -21,12 +21,10 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             This comment was written by a bot!
-          reactions: rocket
-        - name: Update comment
-          if: steps.fc.outputs.comment-id != ''
-          uses: peter-evans/create-or-update-comment@v1
-          with:
-            comment-id: ${{ steps.fc.outputs.comment-id }}
-            body: |
-              This comment has been updated!
-            reactions: hooray
+      - name: Update comment
+        if: steps.fc.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            This comment has been updated!
